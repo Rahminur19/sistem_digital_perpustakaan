@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistem Perpustakaan Digital SMKN 1 Rongga</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #090d16;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .phone-container {
+            background-color: #f8fafc;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: none;
+            border-radius: 0;
+            border: none;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            background-color: #f8fafc;
+            padding: 24px;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .page.fullscreen {
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        .page::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        /* ========================================== */
+        /* LAYAR 1: SPLASH SCREEN */
+        /* ========================================== */
+        .splash-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 40px 24px;
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+
+        .text-center {
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-splash {
+            background: #cce0ff;
+            color: #165DFF;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        .btn-splash:active {
+            transform: scale(0.98);
+            background: #b3d1ff;
+        }
+
+        .btn-primary {
+            background: #165DFF;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: #0F48C9;
+        }
+
+        .btn-secondary {
+            color: #165DFF;
+            background: #f0f4ff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .btn-secondary:active {
+            background: #e0eaff;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+            width: 100%;
+            position: relative;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 14px 14px 14px 40px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            font-size: 13px;
+            color: #0f172a;
+            background-color: #ffffff;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #165DFF;
+        }
+
+        .icon-mata {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .icon-mata:hover {
+            color: #165DFF;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .back-btn {
+            background: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .header-banner {
+            background: #165DFF;
+            color: white;
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-banner h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .header-banner p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .logout-btn { 
+            background: #fee2e2; 
+            color: #dc2626; 
+            border: none; 
+            font-size: 11px; 
+            font-weight: 700; 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .logout-btn:active { 
+            transform: scale(0.95);
+            background: #fecaca;
+        }
+
+        .section-title { 
+            font-size: 14px; 
+            font-weight: 700; 
+            margin: 16px 0 10px 0; 
+            color: #0f172a; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .link-teks {
+            font-size: 11px;
+            color: #165DFF;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .kategori-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 8px; 
+            margin-bottom: 12px;
+        }
+        .kategori-item { 
+            text-align: center; 
+            font-size: 10px; 
+            background: white; 
+            padding: 10px 4px; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            color: #334155; 
+            border: 1px solid #f1f5f9; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .kategori-item:active {
+            transform: scale(0.96);
+            background-color: #f0f4ff;
+            border-color: #bfdbfe;
+        }
+        .kategori-item span {
+            display: block;
+            font-size: 9px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .scroll-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 4px;
+        }
+        .scroll-row::-webkit-scrollbar {
+            height: 4px;
+        }
+        .scroll-row::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .book-card {
+            flex: 0 0 100px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .book-card:active {
+            transform: scale(0.95);
+        }
+        .book-cover {
+            width: 100px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 6px;
+            background-color: #e2e8f0;
+        }
+        .book-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tabs { 
+            display: flex; 
+            gap: 14px; 
+            margin-bottom: 14px; 
+            border-bottom: 1px solid #e2e8f0; 
+        }
+        .tab-item { 
+            font-size: 12px; 
+            padding: 6px 2px; 
+            color: #64748b; 
+            font-weight: 600; 
+            cursor: pointer; 
+            border-bottom: 2px solid transparent;
+        }
+        .tab-item.active { 
+            color: #165DFF;
+            border-bottom: 2px solid #165DFF;
+        }
+
+        .book-list-item { 
+            display: flex; 
+            gap: 12px; 
+            align-items: center; 
+            padding: 10px; 
+            background: white; 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            border: 1px solid #f1f5f9; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .book-list-item:active {
+            background-color: #f8fafc;
+        }
+        .cover-thumb { 
+            width: 42px; 
+            height: 56px; 
+            object-fit: cover; 
+            border-radius: 4px; 
+            background-color: #e2e8f0;
+        }
+        .info-buku {
+            flex-grow: 1;
+        }
+        .judul-buku {
+            font-weight: 700;
+            font-size: 13px;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        .penulis-buku {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .label-kategori {
+            font-size: 9px;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .label-selesai {
+            font-size: 9px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .radio-group { 
+            display: flex; 
+            gap: 10px; 
+            margin: 10px 0; 
+        }
+        .radio-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            padding: 10px 14px; 
+            background: white; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 10px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            color: #334155; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .radio-item.checked {
+            border-color: #165DFF;
+            background-color: #f0f4ff;
+        }
+        .radio-item input {
+            accent-color: #165DFF;
+        }
+
+        .summary-box { 
+            background: white; 
+            padding: 14px; 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 14px; 
+            font-size: 12px;
+        }
+        .row-summary { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 6px;
+        }
+        .text-label { color: #64748b; }
+        .text-value { font-weight: 700; color: #0f172a; }
+
+        .success-icon { 
+            width: 64px; 
+            height: 64px; 
+            background: #dcfce7; 
+            color: #15803d; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 28px; 
+            margin: 0 auto 16px auto; 
+        }
+
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: white; 
+            border-top: 1px solid #e2e8f0; 
+            display: none; 
+            justify-content: space-around; 
+            align-items: center; 
+            z-index: 999;
+        }
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            font-size: 10px; 
+            color: #94a3b8; 
+            cursor: pointer; 
+            gap: 2px;
+            transition: 0.2s;
+        }
+        .nav-item.active { 
+            color: #165DFF;
+        }
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        .book-slider-container {
+            width: 100%;
+            height: calc(100vh - 56px);
+            overflow: hidden;
+            position: relative;
+        }
+        .book-slider-wrapper {
+            display: flex;
+            width: 200%;
+            height: 100%;
+            transition: transform 0.4s ease;
+        }
+        .page-leaf {
+            width: 50%;
+            height: 100%;
+            padding: 20px;
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: #2d3748;
+            font-size: 14px;
+            overflow-y: auto;
+            background: #fff;
+            border-right: 1px solid #e2e8f0;
+        }
+        .page-leaf h3 {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .page-leaf .sub-judul {
+            text-align: center;
+            color: #718096;
+            font-size: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .page-leaf p {
+            text-align: justify;
+            text-indent: 25px;
+            margin-bottom: 12px;
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: 0.2s;
+        }
+        .dot.active { 
+            background: #165DFF;
+            transform: scale(1.2);
+        }
+
+        .btn-kecil {
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-baca { background: #165DFF; color: white; }
+        .btn-kembali { background: #ef4444; color: white; }
+
+        #error-msg {
+            color: #dc2626;
+            font-size: 11px;
+            margin-bottom: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+
+        <!-- ========================================== -->
+        <!-- LAYAR 1: SPLASH SCREEN -->
+        <!-- ========================================== -->
+        <div id="layar-1" class="page active fullscreen">
+            <div class="splash-layout">
+                <div class="text-center" style="margin-top: 40px;">
+                    <img src="Logo.jpg" style="width: 90px; height: 90px; object-fit: contain; margin-bottom: 20px;" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
+                    <h2 style="font-size: 22px; font-weight: 800; line-height: 1.2;">SISTEM DIGITAL<br>PERPUSTAKAAN</h2>
+                    <p style="font-size: 12px; opacity: 0.9; margin-top: 10px;">SMKN 1 RONGGA</p>
+                </div>
+                <div style="width: 100%; margin-bottom: 30px;">
+                    <button class="btn-splash" onclick="pindahLayar('layar-2')">Mulai</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 2: HALAMAN LOGIN -->
+        <!-- ========================================== -->
+        <div id="layar-2" class="page fullscreen">
+            <div class="splash-layout">
+                <div class="text-center" style="margin-top: 40px;">
+                    <img src="Logo.jpg" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 20px;" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
+                    <h2 style="font-size: 18px; font-weight: 800; color:#165DFF; margin-bottom: 5px;">SISTEM DIGITAL<br>PERPUSTAKAAN</h2>
+                    <p style="font-size: 11px; color:#64748b; margin-top: 5px;">SMKN 1 RONGGA</p>
+                </div>
+                <div style="width: 100%; margin-bottom: 30px;">
+                    <div id="error-msg"></div>
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="👤 Username / Nama Pengguna">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="🔒 Kata Sandi">
+                        <span class="icon-mata" onclick="lihatPassword()">👁️</span>
+                    </div>
+                    <button class="btn-primary" onclick="prosesLogin()">Masuk</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 3: BERANDA / DASHBOARD -->
+        <!-- ========================================== -->
+        <div id="layar-3" class="page">
+            <div class="header-banner">
+                <div>
+                    <h3 id="nama-user">Halo, Pengguna!</h3>
+                    <p>Mau baca buku apa hari ini?</p>
+                </div>
+                <button class="logout-btn" onclick="keluarAkun()">Keluar</button>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="search-input" placeholder="🔍 Cari buku, penulis, jurnal..." onkeyup="cariBuku()">
+            </div>
+            
+            <div id="search-results-area" style="display: none; background:white; border-radius:12px; padding:10px; margin-bottom:10px; border:1.5px dashed #1d4ed8;">
+                <div id="search-list"></div>
+            </div>
+
+            <div class="section-title">
+                <span>Kategori Buku</span>
+            </div>
+            <div class="kategori-grid">
+                <div class="kategori-item" onclick="filterKategori('Fiksi'); navSistem('layar-4', 'nav-books')">📚<br>Fiksi<br><span>4 Buku</span></div>
+                <div class="kategori-item" onclick="filterKategori('Pendidikan'); navSistem('layar-4', 'nav-books')">🎓<br>Pendidikan<br><span>3 Buku</span></div>
+                <div class="kategori-item" onclick="filterKategori('Ekonomi'); navSistem('layar-4', 'nav-books')">📈<br>Ekonomi<br><span>1 Buku</span></div>
+                <div class="kategori-item" onclick="filterKategori('Sains'); navSistem('layar-4', 'nav-books')">🔬<br>Sains<br><span>2 Buku</span></div>
+            </div>
+
+            <div class="section-title">
+                <span>Buku Populer</span>
+                <span class="link-teks" onclick="filterKategori('Semua'); navSistem('layar-4', 'nav-books')">Lihat semua</span>
+            </div>
+            <div class="scroll-row">
+                <div class="book-card" onclick="klikBuku('Laskar Pelangi')">
+                    <img src="Laskar.PNG" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=LASKAR'">
+                    <div class="book-title">Laskar Pelangi</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Dilan 1990')">
+                    <img src="dilan.jpg" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=DILAN'">
+                    <div class="book-title">Dilan 1990</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Hujan')">
+                    <img src="hujan.jpg" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=HUJAN'">
+                    <div class="book-title">Hujan</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Filosofi Teras')">
+                    <img src="Filosofi.PNG" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=FILOSOFI'">
+                    <div class="book-title">Filosofi Teras</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Rich Dad Poor Dad')">
+                    <img src="rich_dad_poor_dad.png" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=RICH+DAD'">
+                    <div class="book-title">Rich Dad Poor Dad</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Dongeng Nusantara')">
+                    <img src="dongeng_nusantara.png" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=DONGENG'">
+                    <div class="book-title">Dongeng Nusantara</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Ilmu Pengetahuan Dasar')">
+                    <img src="ilmu.jpg" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=ILMU'">
+                    <div class="book-title">Ilmu Pengetahuan</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Pendidikan Karakter')">
+                    <img src="pendidikan.jpg" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=PENDIDIKAN'">
+                    <div class="book-title">Pendidikan Karakter</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Sains & Teknologi')">
+                    <img src="sains.jpg" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=SAINS'">
+                    <div class="book-title">Sains & Teknologi</div>
+                </div>
+                <div class="book-card" onclick="klikBuku('Totto Chan')">
+                    <img src="totto_chan.png" class="book-cover" onerror="this.src='https://via.placeholder.com/100x140?text=TOTTO+CHAN'">
+                    <div class="book-title">Totto Chan</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 4: DAFTAR KOLEKSI -->
+        <!-- ========================================== -->
+        <div id="layar-4" class="page">
+            <div class="app-header">
+                <button class="back-btn" onclick="pindahLayar('layar-3')">←</button>
+                <h3 style="font-size:16px; font-weight:700; flex-grow:1; text-align:center;">Koleksi <span id="label-kategori"></span></h3>
+            </div>
+
+            <div class="tabs">
+                <div class="tab-item active" onclick="filterKategori('Semua')">Semua (<span id="total-buku">0</span>)</div>
+                <div class="tab-item" onclick="filterKategori('Fiksi')">Fiksi</div>
+                <div class="tab-item" onclick="filterKategori('Pendidikan')">Pendidikan</div>
+                <div class="tab-item" onclick="filterKategori('Ekonomi')">Ekonomi</div>
+                <div class="tab-item" onclick="filterKategori('Sains')">Sains</div>
+            </div>
+
+            <div id="koleksi-list-container"></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 5: DETAIL BUKU -->
+        <!-- ========================================== -->
+        <div id="layar-5" class="page">
+            <div class="app-header">
+                <button class="back-btn" onclick="pindahLayar('layar-4')">←</button>
+                <h3 style="font-size:16px; font-weight:700; text-align:center; flex-grow:1;">Detail Buku</h3>
+            </div>
+            
+            <div class="text-center">
+                <img id="detail-img" src="" style="width: 100px; height: 140px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);" onerror="this.src='https://via.placeholder.com/100x140'">
+                <h3 id="detail-judul" style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 4px;"></h3>
+                <p id="detail-penulis" style="font-size: 11px; color: #64748b; margin-bottom: 14px;"></p>
+            </div>
+
+            <div class="summary-box">
+                <div class="section-title" style="margin-top:0; font-size:12px;">Deskripsi</div>
+                <p style="font-size:11px; color:#475569; text-align:justify;">
+                    Buku literasi unggulan yang menyajikan cerita penuh inspirasi, nilai edukatif, serta sangat direkomendasikan untuk pengembangan kompetensi akademik siswa di lingkungan sekolah.
+                </p>
+                <div class="row-summary" style="margin-top:8px;">
+                    <span class="text-label">Bahasa</span>
+                    <span class="text-value">Indonesia</span>
+                </div>
+                <div class="row-summary">
+                    <span class="text-label">Halaman</span>
+                    <span class="text-value">272 Halaman</span>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="pindahLayar('layar-6')">Ajukan Peminjaman</button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 6: FORM PINJAM -->
+        <!-- ========================================== -->
+        <div id="layar-6" class="page">
+            <div class="app-header">
+                <button class="back-btn" onclick="pindahLayar('layar-5')">←</button>
+                <h3 style="font-size:16px; font-weight:700; text-align:center; flex-grow:1;">Form Peminjaman</h3>
+            </div>
+
+            <div class="summary-box">
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <img id="form-pinjam-img" src="" class="cover-thumb" onerror="this.src='https://via.placeholder.com/42x56'">
+                    <div>
+                        <div id="form-pinjam-judul" style="font-weight:700; font-size:13px;"></div>
+                        <div id="form-pinjam-penulis" style="font-size:11px; color:#64748b;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:0;">Durasi Peminjaman</div>
+            <div class="radio-group">
+                <div class="radio-item checked" id="rd3" onclick="setDurasi(3, 'rd3')">
+                    <input type="radio" name="durasi" checked> 3 Hari
+                </div>
+                <div class="radio-item" id="rd7" onclick="setDurasi(7, 'rd7')">
+                    <input type="radio" name="durasi"> 7 Hari
+                </div>
+                <div class="radio-item" id="rd14" onclick="setDurasi(14, 'rd14')">
+                    <input type="radio" name="durasi"> 14 Hari
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-top:12px;">
+                <textarea id="catatan-pinjam" rows="2" placeholder="Tambah catatan (opsional)"></textarea>
+            </div>
+
+            <button class="btn-primary" onclick="eksekusiPinjamBuku()">Konfirmasi Peminjaman</button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 7: SUKSES PINJAM -->
+        <!-- ========================================== -->
+        <div id="layar-7" class="page fullscreen">
+            <div class="splash-layout">
+                <div class="text-center">
+                    <div class="success-icon">✓</div>
+                    <h3 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:8px;">Berhasil Dipinjam!</h3>
+                    <p style="font-size:12px; color:#64748b; margin-bottom:20px;">Buku <b id="sukses-judul"></b> berhasil dipinjam selama <b id="sukses-hari"></b>.</p>
+                </div>
+                <div style="width:100%;">
+                    <button class="btn-primary" onclick="navSistem('layar-8', 'nav-profile'); gantiTabRak('dipinjam')">Lihat di Rak Saya</button>
+                    <button class="btn-secondary" onclick="navSistem('layar-3', 'nav-home')">Kembali ke Beranda</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 8: RAK SAYA -->
+        <!-- ========================================== -->
+        <div id="layar-8" class="page">
+            <div class="app-header">
+                <h3 style="font-size:16px; font-weight:700; text-align:center; flex-grow:1;">Rak Buku Saya</h3>
+            </div>
+
+            <div class="tabs">
+                <div class="tab-item active" onclick="gantiTabRak('dipinjam')">Sedang Dipinjam</div>
+                <div class="tab-item" onclick="gantiTabRak('riwayat')">Riwayat</div>
+            </div>
+
+            <div id="rak-dipinjam" class="tab-content active"></div>
+            <div id="rak-riwayat" class="tab-content"></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 9: BACA BUKU -->
+        <!-- ========================================== -->
+        <div id="layar-9" class="page fullscreen">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; border-bottom:1px solid #e2e8f0;">
+                <button style="background:none; border:none; font-size:16px; cursor:pointer;" onclick="pindahLayar('layar-8')">←</button>
+                <h4 id="read-judul" style="font-size:13px; font-weight:700;"></h4>
+                <span>⚙️</span>
+            </div>
+
+            <div class="book-slider-container" id="sliderBuku">
+                <div class="book-slider-wrapper" id="sliderWrapper">
+                    <div class="page-leaf" id="lembar1">
+                        <div id="isiLembar1"></div>
+                    </div>
+                    <div class="page-leaf" id="lembar2">
+                        <div id="isiLembar2"></div>
+                    </div>
+                </div>
+                <div class="slider-dots">
+                    <div class="dot active" id="dot1"></div>
+                    <div class="dot" id="dot2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 10: KONFIRMASI KEMBALI -->
+        <!-- ========================================== -->
+        <div id="layar-10" class="page">
+            <div class="app-header">
+                <button class="back-btn" onclick="pindahLayar('layar-8')">←</button>
+                <h3 style="font-size:16px; font-weight:700; text-align:center; flex-grow:1;">Kembalikan Buku</h3>
+            </div>
+
+            <div class="text-center" style="margin-top:20px;">
+                <img id="return-img" src="" style="width:90px; height:125px; object-fit:cover; border-radius:10px; margin-bottom:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);" onerror="this.src='https://via.placeholder.com/90x125'">
+                <h4 id="return-judul" style="font-size:15px; font-weight:800; margin-bottom:14px;"></h4>
+                <p style="font-size:12px; color:#475569; padding:0 10px;">Apakah kamu yakin ingin mengembalikan buku ini ke perpustakaan sekarang?</p>
+            </div>
+
+            <div style="position:absolute; bottom:24px; left:24px; right:24px; display:flex; gap:10px;">
+                <button class="btn-secondary" onclick="pindahLayar('layar-8')">Batal</button>
+                <button class="btn-primary" style="background:#ef4444;" onclick="eksekusiKembalikanBuku()">Ya, Kembalikan</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- LAYAR 11: SUKSES KEMBALI -->
+        <!-- ========================================== -->
+        <div id="layar-11" class="page fullscreen">
+            <div class="splash-layout">
+                <div class="text-center">
+                    <div class="success-icon" style="background:#dcfce7; color:#15803d;">✓</div>
+                    <h3 style="font-size:18px; font-weight:800; color:#0f172a; margin-bottom:8px;">Terima Kasih!</h3>
+                    <p style="font-size:12px; color:#64748b; margin-bottom:20px;">Buku sudah dikembalikan dengan aman ke perpustakaan.</p>
+                </div>
+                <button class="btn-primary" onclick="navSistem('layar-8', 'nav-profile'); gantiTabRak('riwayat')">Lihat Riwayat</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- NAVIGASI BAWAH -->
+        <!-- ========================================== -->
+        <div class="bottom-nav" id="navbar-bawah">
+            <div class="nav-item active" id="nav-home" onclick="navSistem('layar-3', 'nav-home')">
+                <span class="nav-icon">🏠</span>
+                <span>Beranda</span>
+            </div>
+            <div class="nav-item" id="nav-books" onclick="navSistem('layar-4', 'nav-books')">
+                <span class="nav-icon">📚</span>
+                <span>Koleksi</span>
+            </div>
+            <div class="nav-item" id="nav-profile" onclick="navSistem('layar-8', 'nav-profile')">
+                <span class="nav-icon">👤</span>
+                <span>Rak Saya</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // DATABASE BUKU LENGKAP & JUMLAH PAS
+        const databaseBuku = [
+            { 
+                judul: "Laskar Pelangi", penulis: "Andrea Hirata", gambar: "Laskar.PNG", kategori: "Fiksi",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Mimpi dan Harapan di Belitong</p>
+                    <p>Belitong adalah sebuah pulau kecil yang kaya akan timah namun miskin fasilitas. Di sana berdiri SD Muhammadiyah Gantong, sekolah tua yang hampir roboh, berlantai tanah, dan dindingnya penuh lubang. Namun, di sekolah inilah mimpi-mimpi besar mulai tumbuh.</p>
+                    <p>Ada sepuluh anak yang bersekolah di sana, mereka menyebut diri mereka Laskar Pelangi. Ikal, Lintang, Bu Muslimah, dan teman-temannya, meski hidup dalam keterbatasan, semangat belajar mereka tak pernah padam. Bagi mereka, sekolah bukan sekadar tempat menuntut ilmu, tapi tempat bertahan hidup dan bermimpi setinggi langit.</p>
+                    <p>Bu Muslimah, guru yang sabar dan penuh kasih sayang, menjadi ibu kedua bagi mereka. Ia mengajarkan bahwa kemiskinan bukan penghalang untuk menjadi pemenang. Setiap hari mereka berjalan kaki berkilometer jauhnya, melewati hutan dan sungai, hanya demi mendapatkan selembar ilmu yang berharga.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Cahaya di Ujung Jalan</p>
+                    <p>Suatu hari, sekolah mereka terancam ditutup karena kekurangan murid dan dana. Semua berjuang keras agar sekolah tetap berdiri. Mereka bekerja sama, mengumpulkan sumbangan, dan meyakinkan warga desa betapa pentingnya pendidikan bagi masa depan anak-anak.</p>
+                    <p>Lintang, anak jenius dari keluarga nelayan miskin, menjadi kebanggaan sekolah. Ia mampu memecahkan soal matematika sulit dalam sekejap mata. Meski sering diejek oleh anak-anak sekolah elit PN Timah, mereka tidak pernah merasa rendah diri. Semangat persahabatan dan kebersamaan menjadi kekuatan terbesar mereka.</p>
+                    <p>Perjuangan mereka mengajarkan bahwa pendidikan adalah hak semua orang, dan mimpi bisa diraih siapa saja, tidak peduli seberapa sulit jalan yang harus ditempuh. Cerita ini membuktikan bahwa harapan selalu ada, secerah cahaya matahari pagi yang menyinari pulau Belitong.</p>
+                `
+            },
+            { 
+                judul: "Filosofi Teras", penulis: "Henry Manampiring", gambar: "Filosofi.PNG", kategori: "Fiksi",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Apa Itu Stoikisme?</p>
+                    <p>Filosofi Teras atau Stoikisme adalah aliran filsafat kuno yang lahir di Yunani, namun ajarannya sangat relevan untuk kehidupan modern kita. Inti ajarannya sangat sederhana: kita tidak bisa mengendalikan apa yang terjadi pada kita, tapi kita selalu bisa mengendalikan bagaimana kita meresponsnya.</p>
+                    <p>Banyak kecemasan, kemarahan, dan kesedihan kita muncul karena kita ingin mengontrol hal-hal yang sebenarnya berada di luar kuasa kita. Cuaca, pendapat orang lain, masa lalu, atau hasil usaha kita adalah contoh hal yang tidak bisa kita kendalikan sepenuhnya.</p>
+                    <p>Stoik mengajarkan kita untuk membedakan apa yang ada dalam kendali kita dan apa yang tidak. Fokuskan energi hanya pada hal yang bisa kita ubah, dan terima dengan tenang hal yang tidak bisa kita ubah. Ketenangan jiwa adalah tujuan utama hidup.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Mengendalikan Diri dan Bahagia</p>
+                    <p>Kebahagiaan sejati tidak datang dari harta, ketenaran, atau kekuasaan, melainkan dari karakter diri sendiri: kebijaksanaan, keberanian, keadilan, dan kedisiplinan. Orang yang bahagia adalah orang yang berperilaku baik dan hidup selaras dengan alam dan akal sehat.</p>
+                    <p>Emosi negatif seperti iri, benci, atau takut berlebihan muncul dari penilaian yang salah terhadap sesuatu. Jika kita melihat masalah sebagai tantangan, bukan musuh, kita akan lebih kuat. Latihan mental sederhana seperti membayangkan kehilangan apa yang kita miliki, atau mengingat bahwa kita hanya manusia biasa, membantu kita hidup lebih sederhana dan bersyukur.</p>
+                    <p>Filosofi ini bukan berarti menjadi orang yang dingin atau tanpa perasaan, melainkan menjadi orang yang tidak mudah goyah, tetap tenang di tengah badai, dan selalu berbuat baik kepada sesama. Hidup tenang dan bebas dari gejolak batin adalah kemewahan terbesar manusia.</p>
+                `
+            },
+            { 
+                judul: "Hujan", penulis: "Tere Liye", gambar: "hujan.jpg", kategori: "Fiksi",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Pertemuan di Tengah Badai</p>
+                    <p>Di sebuah desa kecil yang damai, hiduplah Lail, seorang gadis yatim piatu yang tumbuh menjadi wanita cerdas dan tangguh. Ia diasuh oleh kerabatnya dengan penuh kasih sayang. Suatu hari, saat hujan lebat turun membasahi bumi, ia bertemu dengan Esok, seorang pemuda jenius yang baru saja pindah ke desa itu.</p>
+                    <p>Esok adalah anak yang luar biasa pintarnya, pandai merakit alat canggih dan punya ide-ide brilian yang tidak terpikirkan orang lain. Pertemuan itu mengubah seluruh jalan hidup mereka. Mereka menjadi sahabat dekat, belajar bersama, dan saling menguatkan. Di tengah rintik hujan, benih-benih cinta dan persahabatan mulai tumbuh indah.</p>
+                    <p>Namun, dunia tidak selamanya damai. Bencana besar datang mengubah segalanya. Gunung meletus, gempa bumi, dan badai besar menghancurkan banyak tempat. Lail dan Esok harus berjuang bertahan hidup, berpisah dan mencari jalan masing-masing di tengah kehancuran itu. Meski terpisah jauh, janji yang mereka ucapkan di bawah hujan tidak pernah hilang dari ingatan.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Dunia Baru dan Harapan</p>
+                    <p>Waktu berlalu bertahun-tahun. Dunia berubah total, teknologi maju sangat pesat, manusia mulai membangun peradaban baru yang lebih canggih dan aman. Lail tumbuh menjadi wanita tangguh yang bekerja di tim peneliti iklim. Ia selalu mengingat Esok, sosok yang mengajarkannya bahwa tidak ada yang mustahil di dunia ini.</p>
+                    <p>Suatu hari, kabar besar terdengar: manusia berencana pindah ke planet baru karena bumi sudah tidak lagi aman untuk ditinggali. Proyek raksasa ini membuat semua orang sibuk, berharap bisa selamat. Di tengah hiruk-pikuk persiapan itulah, takdir mempertemukan kembali Lail dan Esok. Esok kini menjadi ilmuwan jenius yang memimpin proyek perpindahan umat manusia.</p>
+                    <p>Pertemuan itu penuh rindu namun juga penuh perubahan. Keduanya telah dewasa, punya tanggung jawab besar, dan hidup yang berbeda. Meski cinta itu masih ada, keadaan memaksa mereka memilih antara kebahagiaan pribadi atau keselamatan banyak orang. Di bawah langit yang kembali menurunkan hujan, mereka harus mengambil keputusan terberat dalam hidup mereka melepaskan atau mempertahankan.</p>
+                `
+            },
+            { 
+                judul: "Dilan 1990", penulis: "Pidi Baiq", gambar: "dilan.jpg", kategori: "Fiksi",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Dia, Dilan</p>
+                    <p>Bandung, tahun 1990. Milea baru saja pindah dari Jakarta dan masuk ke SMA di Bandung. Di sekolah baru itu, ia mendengar banyak cerita tentang seorang anak laki-laki bernama Dilan. Dilan dikenal sebagai anak yang unik, pemberani, sedikit nakal, tapi sangat jenius dan punya cara berpikir yang beda dari anak laki-laki lain.</p>
+                    <p>Suatu sore, Milea bertemu Dilan untuk pertama kalinya. Dilan tidak menyapa seperti orang biasa. Dia langsung mengajak berbicara                    dengan gaya yang santai dan sedikit bikin penasaran. Sejak saat itu, Dilan mulai sering muncul di sekitar Milea, entah di sekolah, di jalan pulang, atau lewat surat-surat yang dikirimnya.</p>
+                    <p>Dilan tidak pernah mengatakan "aku cinta kamu" secara langsung. Dia menunjukkan perasaannya lewat cara-cara yang unik, kadang konyol, tapi selalu tulus. Ia berjanji akan melindungi Milea dan membuatnya merasa istimewa. Di tengah masa SMA yang penuh kenangan, persahabatan dan cinta mulai tumbuh di antara mereka, meski seringkali diwarnai kesalahpahaman dan kebiasaan Dilan yang suka berbuat onar.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Cara Dilan Mencintai</p>
+                    <p>Dilan punya prinsip sendiri: "Kalau aku sudah mencintaimu, termasuk aku tidak akan menyerah sekalipun kamu sendiri yang memintaku berhenti." Ia tidak suka hal-hal yang berlebihan, tapi selalu ada cara untuk membuat Milea tersenyum. Entah dengan mengirimkan puisi sederhana, menunggunya di depan gerbang sekolah, atau sekadar mengajaknya berkeliling kota Bandung naik sepeda motor tua miliknya.</p>
+                    <p>Namun, tidak semuanya berjalan mulus. Ada teman-teman Dilan yang suka berkelahi, ada orang tua yang mulai khawatir, dan ada rasa cemburu yang kadang muncul di antara mereka. Milea sering bingung, apakah ia harus terus dekat dengan Dilan yang sering dianggap nakal oleh banyak orang, atau menjauh demi ketenangan pikirannya.</p>
+                    <p>Namun, di balik tingkah lakunya yang bebas, Dilan memiliki hati yang baik dan cita-cita yang besar. Ia mengajarkan Milea bahwa cinta itu tidak harus selalu manis, tapi juga tentang pengertian dan keberanian. Kisah mereka menjadi salah satu kenangan paling indah di masa remaja, mengajarkan bahwa cinta pertama sering kali meninggalkan jejak yang tak terlupakan selamanya.</p>
+                `
+            },
+            { 
+                judul: "Rich Dad Poor Dad", penulis: "Robert T. Kiyosaki", gambar: "rich_dad_poor_dad.png", kategori: "Ekonomi",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Dua Pola Pikir yang Berbeda</p>
+                    <p>Buku ini menceritakan perbedaan besar antara dua sosok ayah dalam hidup penulis: ayah kandungnya yang disebut "Ayah Miskin", dan ayah dari sahabatnya yang disebut "Ayah Kaya". Keduanya memiliki pendidikan yang baik, namun memiliki pandangan yang sangat bertentangan tentang uang dan cara mengelola kehidupan.</p>
+                    <p>Ayah Miskin selalu menyarankan: "Belajarlah dengan giat agar nanti dapat pekerjaan yang bagus dan gaji tinggi". Sebaliknya, Ayah Kaya mengajarkan: "Belajarlah bagaimana uang bekerja untukmu, bukan kamu yang bekerja keras untuk uang". Perbedaan pola pikir inilah yang menjadi dasar mengapa sebagian orang menjadi kaya dan sebagian lainnya selamanya berjuang memenuhi kebutuhan hidup.</p>
+                    <p>Banyak orang terjebak dalam "roda tikus": bekerja keras, mendapat gaji, membayar tagihan, lalu bekerja lagi. Hal ini terjadi karena mereka tidak memiliki literasi keuangan. Mereka menganggap rumah yang dibeli adalah aset, padahal sebenarnya itu adalah kewajiban yang terus mengeluarkan uang untuk perawatan, pajak, dan cicilan.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Aset vs Kewajiban</p>
+                    <p>Ayah Kaya memberikan definisi sederhana namun sangat penting: <b>Aset adalah sesuatu yang memasukkan uang ke kantongmu. Kewajiban adalah sesuatu yang mengeluarkan uang dari kantongmu.</b> Orang miskin dan kelas menengah membeli kewajiban yang mereka kira sebagai aset, sedangkan orang kaya terus mengumpulkan aset yang menghasilkan pendapatan pasif.</p>
+                    <p>Penulis menekankan pentingnya berani mengambil risiko yang terukur dan tidak takut melakukan kesalahan. Banyak orang tidak menjadi kaya karena terlalu takut gagal atau kehilangan uang. Padahal, kesalahan adalah guru terbaik untuk memahami cara kerja keuangan dan investasi.</p>
+                    <p>Pesan utamanya adalah: tingkatkan pengetahuan tentang keuangan, fokuslah membeli aset, dan jangan biarkan ketakutan atau keinginan sesaat menguasai keputusanmu. Kebebasan finansial bukan berarti memiliki banyak uang, melainkan memiliki cukup aset yang menghasilkan pendapatan untuk menutupi seluruh biaya hidup tanpa harus bekerja lagi.</p>
+                `
+            },
+            { 
+                judul: "Dongeng Nusantara", penulis: "Berbagai Penulis", gambar: "dongeng_nusantara.png", kategori: "Pendidikan",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Asal Mula Danau Toba</p>
+                    <p>Dahulu kala, di sebuah desa di Sumatera Utara, hiduplah seorang pemuda bernama Toba. Ia hidup sebatang kara dan bekerja sebagai petani serta nelayan. Suatu hari, saat memancing, ia mendapatkan seekor ikan mas yang sangat indah. Ajaibnya, ikan itu bisa berbicara dan memohon agar tidak dimakan.</p>
+                    <p>Tiba-tiba ikan itu berubah menjadi seorang wanita cantik. Wanita itu ternyata adalah putri yang dikutuk. Mereka pun menikah dengan satu syarat: Toba tidak boleh menceritakan asal-usul istrinya. Beberapa tahun kemudian, mereka dikaruniai seorang anak laki-laki bernama Samosir yang memiliki nafsu makan sangat besar.</p>
+                    <p>Suatu hari, Samosir diminta mengantarkan makanan ke ladang. Di tengah jalan, ia memakan sebagian makanannya. Saat tiba, Toba marah besar dan tanpa sadar berkata: "Dasar anak ikan tidak tahu diuntung!" Seketika langit menjadi gelap, hujan turun deras, dan terjadilah banjir besar yang membentuk Danau Toba, dengan pulau di tengahnya yang disebut Pulau Samosir.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Malin Kundang</p>
+                    <p>Di Sumatera Barat, hiduplah seorang janda miskin dan anak laki-lakinya bernama Malin Kundang. Malin sangat ingin merantau untuk mengubah nasib. Dengan berat hati, ibunya mengizinkannya pergi. Bertahun-tahun tidak ada kabar, hingga akhirnya Malin kembali sebagai saudagar kaya dengan istri dan anak buahnya.</p>
+                    <p>Saat ibunya mendengar kabar itu, ia berlari menyambut dengan gembira. Namun, Malin malu mengakui ibunya yang miskin dan lusuh. Ia mengusir ibunya dengan kasar. Hati wanita itu hancur, lalu ia berdoa kepada Tuhan agar memberikan keadilan.</p>
+                    <p>Tak lama kemudian, langit berubah gelap, badai datang, dan kapal Malin dihantam ombak besar. Perlahan tubuh Malin berubah menjadi batu sebagai hukuman atas durhaka kepada ibu yang melahirkannya. Hingga kini, batu itu masih dapat dilihat di pantai Air Manis, menjadi pengingat pentingnya berbakti kepada orang tua.</p>
+                `
+            },
+            { 
+                judul: "Ilmu Pengetahuan Dasar", penulis: "Tim Guru Indonesia", gambar: "ilmu.jpg", kategori: "Sains",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Bumi dan Alam Semesta</p>
+                    <p>Bumi adalah planet tempat kita tinggal, salah satu dari delapan planet yang mengelilingi Matahari dalam tata surya kita. Matahari sendiri adalah bintang yang memberikan cahaya dan panas, sumber energi utama bagi kehidupan di bumi. Bumi berputar pada porosnya setiap 24 jam, menyebabkan terjadinya siang dan malam, serta mengelilingi Matahari selama 365 hari, menciptakan pergantian musim.</p>
+                    <p>Permukaan bumi terdiri dari daratan dan lautan. Lautan menutupi sekitar 70% dari seluruh permukaan bumi. Di dalam bumi terdapat lapisan kulit bumi, mantel, dan inti bumi yang sangat panas. Pergerakan lempeng bumi dapat menyebabkan terjadinya gempa bumi dan letusan gunung berapi.</p>
+                    <p>Atmosfer bumi adalah lapisan udara yang melindungi kita dari radiasi matahari yang berbahaya dan benda angkasa yang jatuh. Udara tersusun dari nitrogen, oksigen, karbon dioksida, dan gas lainnya yang sangat penting untuk pernapasan makhluk hidup.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Makhluk Hidup dan Lingkungan</p>
+                    <p>Semua makhluk hidup memiliki ciri-ciri yang membedakannya dengan benda mati: bernapas, bergerak, tumbuh, berkembang biak, peka terhadap rangsangan, membutuhkan makanan, dan mengeluarkan zat sisa. Makhluk hidup dikelompokkan menjadi hewan, tumbuhan, dan manusia.</p>
+                    <p>Tumbuhan berperan sangat penting sebagai produsen makanan melalui proses fotosintesis dengan bantuan sinar matahari. Hewan dan manusia membutuhkan oksigen yang dihasilkan tumbuhan, sedangkan tumbuhan membutuhkan karbon dioksida yang dikeluarkan hewan dan manusia. Ini menunjukkan adanya ketergantungan timbal balik yang disebut rantai makanan dan jaring-jaring makanan.</p>
+                    <p>Lingkungan adalah segala sesuatu di sekitar kita yang memengaruhi kehidupan. Menjaga keseimbangan alam sangat penting agar air tetap bersih, udara tetap segar, dan tanah tetap subur. Kerusakan lingkungan dapat menyebabkan bencana alam dan kepunahan berbagai jenis makhluk hidup.</p>
+                `
+            },
+            { 
+                judul: "Pendidikan Karakter", penulis: "Drs. H. Abdul Majid", gambar: "pendidikan.jpg", kategori: "Pendidikan",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Pentingnya Akhlak Mulia</p>
+                    <p>Pendidikan karakter adalah upaya menanamkan nilai-nilai luhur agar seseorang menjadi pribadi yang baik, bertanggung jawab, dan bermanfaat bagi sesama. Ilmu pengetahuan saja tidak cukup jika tidak disertai dengan akhlak yang mulia. Orang yang pintar tapi berperilaku buruk justru dapat merugikan banyak orang.</p>
+                    <p>Nilai utama yang harus ditanamkan meliputi: jujur, disiplin, tanggung jawab, sopan santun, percaya diri, kerja keras, dan peduli terhadap orang lain. Kejujuran adalah fondasi utama dalam membangun kepercayaan. Orang yang jujur akan selalu dihormati, meski kadang harus menghadapi kesulitan karena berkata benar.</p>
+                    <p>Disiplin mengajarkan kita menghargai waktu dan aturan. Tanpa disiplin, cita-cita sulit tercapai. Tanggung jawab berarti berani menerima konsekuensi dari setiap tindakan yang kita lakukan, tidak menyalahkan orang lain saat berbuat salah, dan berusaha memperbaikinya.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Hidup Bermasyarakat dan Berbakti</p>
+                    <p>Manusia adalah makhluk sosial yang tidak dapat hidup sendiri. Oleh karena itu, kita harus bisa hidup rukun dengan tetangga, teman, dan masyarakat. Sikap tolong-menolong, saling menghormati perbedaan suku, agama, dan pendapat, serta menjaga kerukunan adalah kunci kedamaian hidup bersama.</p>
+                    <p>Berbakti kepada orang tua dan guru adalah kewajiban utama. Orang tua telah berjuang membesarkan dan mendidik kita dengan penuh pengorbanan. Menghormati mereka, mendengarkan nasihatnya, dan membahagiakan hati mereka adalah bentuk terima kasih yang paling nyata. Begitu juga dengan guru yang telah mencurahkan ilmu pengetahuan untuk masa depan kita.</p>
+                    <p>Membentuk karakter tidak bisa instan, butuh proses dan kebiasaan sehari-hari. Mulailah dari hal-hal kecil: berkata sopan, mengakui kesalahan, menepati janji, dan membantu sesama tanpa pamrih. Jika setiap orang memiliki karakter yang baik, maka terciptalah masyarakat yang damai, adil, dan sejahtera.</p>
+                `
+            },
+            { 
+                judul: "Sains & Teknologi", penulis: "Dr. Ir. Budi Santoso", gambar: "sains.jpg", kategori: "Sains",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Perkembangan Teknologi dari Masa ke Masa</p>
+                    <p>Sejarah manusia tidak lepas dari upaya menciptakan alat untuk memudahkan hidup. Pada zaman purba, manusia menggunakan batu dan kayu sebagai alat berburu. Kemudian ditemukan api, logam, roda, hingga tulisan yang mengubah cara manusia menyimpan pengetahuan.</p>
+                    <p>Revolusi industri membawa perubahan besar dengan ditemukannya mesin uap, listrik, dan telepon. Komunikasi yang dulunya memakan waktu berbulan-bulan, kini bisa dilakukan dalam hitungan detik. Di era modern, teknologi berkembang sangat pesat: komputer, internet, ponsel pintar, hingga kecerdasan buatan yang membantu pekerjaan manusia.</p>
+                    <p>Sains adalah dasar dari semua penemuan teknologi. Sains mempelajari gejala alam dan mencari kebenaran, sedangkan teknologi menerapkan pengetahuan sains untuk membuat alat yang bermanfaat. Keduanya saling melengkapi dan terus berkembang seiring waktu.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Manfaat dan Dampak Teknologi</p>
+                    <p>Teknologi memberikan banyak kemudahan: transportasi menjadi cepat dan aman, pengobatan penyakit semakin maju, pertanian semakin produktif sehingga kelaparan bisa dicegah, dan informasi dapat diakses oleh siapa saja. Pendidikan pun semakin terbuka lebar dengan adanya kelas daring dan perpustakaan digital.</p>
+                    <p>Namun, teknologi juga memiliki dampak negatif jika digunakan secara tidak bijak. Polusi udara dan air akibat pabrik, sampah elektronik, ketergantungan pada gawai, hingga penyebaran informasi bohong adalah tantangan yang harus dihadapi. Oleh karena itu, kita harus belajar menggunakan teknologi secara bertanggung jawab.</p>
+                    <p>Masa depan teknologi akan semakin canggih dengan penelitian di bidang energi terbarukan, eksplorasi luar angkasa, dan pengobatan genetik. Tugas generasi muda adalah mempelajari dan mengembangkan ilmu pengetahuan, serta memastikan teknologi digunakan untuk kesejahteraan seluruh umat manusia dan kelestarian alam.</p>
+                `
+            },
+            { 
+                judul: "Totto Chan", penulis: "Tetsuko Kuroyanagi", gambar: "totto_chan.png", kategori: "Pendidikan",
+                bab1: `
+                    <h3>BAB 1</h3>
+                    <p class="sub-judul">Anak yang Berbeda</p>
+                    <p>Totto Chan adalah seorang gadis kecil yang ceria, aktif, dan sangat penasaran dengan segala hal. Sayangnya, sifatnya yang terlalu aktif membuatnya dikeluarkan dari sekolah pertamanya. Ia sering berdiri di dekat jendela menyapa orang yang lewat, membuka dan menutup meja berkali-kali, hingga mengganggu pelajaran berlangsung.</p>
+                    <p>Ibunya tidak putus asa dan mencari sekolah yang cocok untuk Totto. Akhirnya mereka menemukan Sekolah Tomoe, sebuah sekolah unik yang terletak di bekas gerbong kereta api. Kepala sekolahnya bernama Sosaku Kobayashi, seorang pria bijaksana yang memahami cara berpikir anak-anak.</p>
+                    <p>Saat pertama kali bertemu, Totto bercerita tanpa henti selama lebih dari satu jam. Kepala sekolah hanya mendengarkan dengan sabar dan tersenyum. Ia berkata: "Kamu akan menjadi murid yang baik di sini." Kata-kata itu membuat Totto merasa sangat diterima dan dicintai.</p>
+                `,
+                bab2: `
+                    <h3>BAB 2</h3>
+                    <p class="sub-judul">Belajar dengan Cara Menyenangkan</p>
+                    <p>Di Sekolah Tomoe, tidak ada aturan kaku. Murid bebas memulai pelajaran dari mata pelajaran yang mereka sukai terlebih dahulu. Jika ada yang ingin mempelajari bunga, mereka bisa pergi ke taman sekolah dan mengamatinya langsung. Setiap hari ada waktu makan siang bersama dan kegiatan bermain di alam bebas.</p>
+                    <p>Kepala sekolah mengajarkan hal-hal penting dengan cara yang sederhana: menghormati orang lain, mencintai alam, dan menjadi diri sendiri. Di sekolah ini, Totto berteman dengan anak-anak dari berbagai latar belakang, termasuk anak penyandang disabilitas yang diajarkan untuk percaya diri.</p>
+                    <p>Meskipun sekolah itu hancur saat perang dunia, kenangan dan nilai-nilai yang diajarkan Kepala Sekolah Kobayashi tetap hidup. Buku ini mengajarkan bahwa setiap anak itu unik, tidak ada yang salah, hanya butuh cara mengajar yang tepat dan kesabaran agar bakat mereka bisa berkembang dengan indah.</p>
+                `
+            }
+        ];
+
+        // Array untuk riwayat peminjaman
+        let rakBuku = [];
+        let riwayatBuku = [];
+        let bukuTerpilih = {};
+        let durasiPinjam = 3;
+
+        // Fungsi utama ganti halaman
+        function pindahLayar(idLayar) {
+            document.querySelectorAll('.page').forEach(layar => layar.classList.remove('active'));
+            document.getElementById(idLayar).classList.add('active');
+            if(!document.getElementById(idLayar).classList.contains('fullscreen')){
+                document.getElementById('navbar-bawah').style.display = 'flex';
+            } else {
+                document.getElementById('navbar-bawah').style.display = 'none';
+            }
+        }
+
+        // Navigasi sistem
+        function navSistem(idLayar, idNav) {
+            pindahLayar(idLayar);
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(idNav).classList.add('active');
+        }
+
+        // Fungsi lihat/ sembunyi password
+        function lihatPassword() {
+            const inputPass = document.getElementById('password');
+            const icon = document.querySelector('.icon-mata');
+            inputPass.type = inputPass.type === 'password' ? 'text' : 'password';
+            icon.textContent = inputPass.type === 'password' ? '👁️' : '';
+        }
+
+        // Fungsi login
+        function prosesLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if(user === '' || pass === ''){
+                errorMsg.textContent = '❌ Username dan Password tidak boleh kosong!';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if(pass === 'SMKN1RONGGA'){
+                errorMsg.style.display = 'none';
+                document.getElementById('nama-user').textContent = `Halo, ${user}!`;
+                pindahLayar('layar-3');
+            } else {
+                errorMsg.textContent = '❌ Password salah! ';
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // Fungsi keluar akun
+        function keluarAkun() {
+            if(confirm('Yakin ingin keluar dari akun?')){
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                pindahLayar('layar-2');
+            }
+        }
+
+        // Fungsi filter kategori
+        function filterKategori(kategori) {
+            const container = document.getElementById('koleksi-list-container');
+            const labelKategori = document.getElementById('label-kategori');
+            const totalBuku = document.getElementById('total-buku');
+            
+            let hasil = [];
+            if(kategori === 'Semua'){
+                hasil = databaseBuku;
+                labelKategori.textContent = 'Semua Buku';
+            } else {
+                hasil = databaseBuku.filter(buku => buku.kategori === kategori);
+                labelKategori.textContent = kategori;
+            }
+
+            totalBuku.textContent = hasil.length;
+            container.innerHTML = '';
+
+            if(hasil.length === 0){
+                container.innerHTML = `<p style="text-align:center; padding:30px; color:#64748b;">Belum ada buku di kategori ini</p>`;
+                return;
+            }
+
+            hasil.forEach(buku => {
+                const item = document.createElement('div');
+                item.className = 'book-list-item';
+                item.onclick = () => bukaDetailBuku(buku);
+                item.innerHTML = `
+                    <img src="${buku.gambar}" class="cover-thumb" onerror="this.src='https://via.placeholder.com/42x56'">
+                    <div class="info-buku">
+                        <div class="judul-buku">${buku.judul}</div>
+                        <div class="penulis-buku">${buku.penulis}</div>
+                        <span class="label-kategori">${buku.kategori}</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Fungsi cari buku
+        function cariBuku() {
+            const kataKunci = document.getElementById('search-input').value.toLowerCase().trim();
+            const areaHasil = document.getElementById('search-results-area');
+            const daftarHasil = document.getElementById('search-list');
+
+            if(kataKunci.length < 2){
+                areaHasil.style.display = 'none';
+                return;
+            }
+
+            const hasil = databaseBuku.filter(buku => 
+                buku.judul.toLowerCase().includes(kataKunci) || 
+                buku.penulis.toLowerCase().includes(kataKunci) ||
+                buku.kategori.toLowerCase().includes(kataKunci)
+            );
+
+            daftarHasil.innerHTML = '';
+            if(hasil.length === 0){
+                daftarHasil.innerHTML = `<p style="text-align:center; padding:10px; color:#64748b;">Tidak ditemukan buku yang cocok</p>`;
+            } else {
+                hasil.forEach(buku => {
+                    const item = document.createElement('div');
+                    item.className = 'book-list-item';
+                    item.style.marginBottom = '6px';
+                    item.onclick = () => {
+                        bukaDetailBuku(buku);
+                        areaHasil.style.display = 'none';
+                        document.getElementById('search-input').value = '';
+                    };
+                    item.innerHTML = `
+                        <img src="${buku.gambar}" class="cover-thumb" onerror="this.src='https://via.placeholder.com/42x56'">
+                        <div class="info-buku">
+                            <div class="judul-buku">${buku.judul}</div>
+                            <div class="penulis-buku">${buku.penulis}</div>
+                            <span class="label-kategori">${buku.kategori}</span>
+                        </div>
+                    `;
+                    daftarHasil.appendChild(item);
+                });
+            }
+            areaHasil.style.display = 'block';
+        }
+
+        // Fungsi buka detail buku
+        function bukaDetailBuku(buku) {
+            bukuTerpilih = buku;
+            document.getElementById('detail-img').src = buku.gambar;
+            document.getElementById('detail-judul').textContent = buku.judul;
+            document.getElementById('detail-penulis').textContent = `Penulis: ${buku.penulis}`;
+            
+            document.getElementById('form-pinjam-img').src = buku.gambar;
+            document.getElementById('form-pinjam-judul').textContent = buku.judul;
+            document.getElementById('form-pinjam-penulis').textContent = `Penulis: ${buku.penulis}`;
+            
+            pindahLayar('layar-5');
+        }
+
+        // Fungsi klik buku di halaman utama
+        function klikBuku(judul) {
+            const buku = databaseBuku.find(item => item.judul === judul);
+            if(buku) bukaDetailBuku(buku);
+        }
+
+        // Fungsi set durasi pinjam
+        function setDurasi(hari, id) {
+            durasiPinjam = hari;
+            document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('checked'));
+            document.getElementById(id).classList.add('checked');
+        }
+
+        // Fungsi pinjam buku
+        function eksekusiPinjamBuku() {
+            const sudahAda = rakBuku.find(b => b.judul === bukuTerpilih.judul);
+            if(sudahAda){
+                alert('Buku ini sudah ada di rak kamu!');
+                return;
+            }
+
+            const dataPinjam = {
+                ...bukuTerpilih,
+                durasi: durasiPinjam,
+                tanggalPinjam: new Date().toLocaleDateString('id-ID')
+            };
+
+            rakBuku.push(dataPinjam);
+            document.getElementById('sukses-judul').textContent = bukuTerpilih.judul;
+            document.getElementById('sukses-hari').textContent = `${durasiPinjam} hari`;
+            pindahLayar('layar-7');
+        }
+
+        // Fungsi ganti tab rak
+        function gantiTabRak(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+            
+            if(tab === 'dipinjam'){
+                document.querySelector('.tabs .tab-item:nth-child(1)').classList.add('active');
+                const container = document.getElementById('rak-dipinjam');
+                container.innerHTML = '';
+
+                if(rakBuku.length === 0){
+                    container.innerHTML = `<p style="text-align:center; padding:40px; color:#64748b;">Belum ada buku yang dipinjam<br><br><button class="btn-primary" onclick="navSistem('layar-4', 'nav-books')">Cari Buku</button></p>`;
+                } else {
+                    rakBuku.forEach((buku, idx) => {
+                        const item = document.createElement('div');
+                        item.className = 'book-list-item';
+                        item.innerHTML = `
+                            <img src="${buku.gambar}" class="cover-thumb" onerror="this.src='https://via.placeholder.com/42x56'">
+                            <div class="info-buku" style="flex:1;">
+                                <div class="judul-buku">${buku.judul}</div>
+                                <div class="penulis-buku">Penulis: ${buku.penulis}</div>
+                                <div style="font-size:10px; color:#165DFF; margin:4px 0;">Dipinjam: ${buku.tanggalPinjam} | ${buku.durasi} Hari</div>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <button class="btn-kecil btn-baca" onclick="bukaBacaBuku(${idx})">Baca</button>
+                                <button class="btn-kecil btn-kembali" onclick="konfirmasiKembali(${idx})">Kembalikan</button>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+                container.classList.add('active');
+            } else {
+                document.querySelector('.tabs .tab-item:nth-child(2)').classList.add('active');
+                const container = document.getElementById('rak-riwayat');
+                container.innerHTML = '';
+
+                if(riwayatBuku.length === 0){
+                    container.innerHTML = `<p style="text-align:center; padding:40px; color:#64748b;">Belum ada riwayat peminjaman</p>`;
+                } else {
+                    riwayatBuku.forEach((buku) => {
+                        const item = document.createElement('div');
+                        item.className = 'book-list-item';
+                        item.innerHTML = `
+                            <img src="${buku.gambar}" class="cover-thumb" onerror="this.src='https://via.placeholder.com/42x56'">
+                            <div class="info-buku" style="flex:1;">
+                                <div class="judul-buku">${buku.judul}</div>
+                                <div class="penulis-buku">Penulis: ${buku.penulis}</div>
+                                <div style="font-size:10px; color:#166534; margin:4px 0;">Dikembalikan: ${buku.tanggalKembali}</div>
+                                <span class="label-selesai">Selesai</span>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+                container.classList.add('active');
+            }
+        }
+
+        // Fungsi buka halaman baca
+        function bukaBacaBuku(index) {
+            const buku = rakBuku[index];
+            document.getElementById('read-judul').textContent = buku.judul;
+            document.getElementById('isiLembar1').innerHTML = buku.bab1;
+            document.getElementById('isiLembar2').innerHTML = buku.bab2;
+            
+            document.getElementById('sliderWrapper').style.transform = 'translateX(0%)';
+            document.getElementById('dot1').classList.add('active');
+            document.getElementById('dot2').classList.remove('active');
+            
+            pindahLayar('layar-9');
+        }
+
+        // Geser halaman buku
+        let posisi = 0;
+        let startX = 0, endX = 0;
+        const slider = document.getElementById('sliderWrapper');
+        slider.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+        });
+        slider.addEventListener('touchend', e => {
+            endX = e.changedTouches[0].clientX;
+            if(startX - endX > 50){
+                posisi = 100;
+            } else if(endX - startX > 50){
+                posisi = 0;
+            }
+            slider.style.transform = `translateX(-${posisi}%)`;
+            document.getElementById('dot1').classList.toggle('active', posisi === 0);
+            document.getElementById('dot2').classList.toggle('active', posisi === 100);
+        });
+
+        // Konfirmasi kembalikan
+        let indexKembali = 0;
+        function konfirmasiKembali(index) {
+            indexKembali = index;
+            const buku = rakBuku[index];
+            document.getElementById('return-img').src = buku.gambar;
+            document.getElementById('return-judul').textContent = buku.judul;
+            pindahLayar('layar-10');
+        }
+
+        // Eksekusi kembalikan + masuk ke riwayat
+        function eksekusiKembalikanBuku() {
+            const bukuDikembalikan = rakBuku[indexKembali];
+            // Tambah data ke riwayat
+            riwayatBuku.push({
+                ...bukuDikembalikan,
+                tanggalKembali: new Date().toLocaleDateString('id-ID')
+            });
+            // Hapus dari daftar dipinjam
+            rakBuku.splice(indexKembali, 1);
+            pindahLayar('layar-11');
+        }
+
+        // Inisialisasi awal
+        window.onload = function(){
+            filterKategori('Semua');
+        }
+    </script>
+</body>
+</html>
+
+
